@@ -103,10 +103,10 @@ Scaling and encoding in this file are fitted on **all** rows, so it documents th
 ## Getting started
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/<your-username>/<your-repo>.git](https://github.com/JasGLe/Adult-Census-Income-DS-LAB.git
+cd Adult-Census-Income-DS-LAB
 pip install -r requirements.txt
-jupyter notebook adult_census_income.ipynb
+jupyter notebook Lab.ipynb
 ```
 
 Keep the original UCI files in the `adult/` folder (the notebook reads `adult/adult.data` and `adult/adult.test`), then use **Kernel → Restart & Run All**. The hyperparameter search takes a few minutes. Random steps use `random_state=42`, so results are reproducible.
