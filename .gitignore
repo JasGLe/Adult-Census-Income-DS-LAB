@@ -1,0 +1,5 @@
+adult/adult_raw.csv
+adult_raw.csv
+.ipynb_checkpoints/
+__pycache__/
+.DS_Store
