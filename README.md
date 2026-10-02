@@ -90,6 +90,7 @@ Test scores are within 0.005 of the cross-validation scores, so there is no sign
 │   ├── adult.test              # Test file
 │   ├── adult.names             # Data dictionary
 │   └── Index                   # UCI index of the dataset files
+├── requirements.txt
 ├── .gitignore                  # Excludes the regenerated raw backup (adult_raw.csv)
 └── README.md
 ```
