@@ -1,4 +1,5 @@
 adult/adult_raw.csv
+adult/old.adult.names
 adult_raw.csv
 .ipynb_checkpoints/
 __pycache__/
