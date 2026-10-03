@@ -20,15 +20,15 @@ End-to-end data science notebook on the **UCI Adult (Census Income)** dataset, f
 
 ## Notebook structure
 
-| Section                          | Content                                                                                             |
-| -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| 1. Business Understanding        | Problem, objectives, success criteria                                                               |
-| 2. Data Understanding            | Loading, structure, variable types, descriptive statistics                                          |
-| 3. Data Exploration              | Hidden missing values, class balance, distributions, categorical variables vs. income, correlations |
-| 4. Data Preparation              | Cleaning, missing values, regrouping, feature engineering, encoding and scaling, export             |
-| 5. Segmentation                  | K-Means, choice of k, segment profiling                                                             |
-| 6. Classification                | Baselines, class imbalance, tree-based models, tuning, final test evaluation                        |
-| 7. Evaluation and interpretation | Summary, limits, next steps                                                                         |
+| Section                          | Content                                                                                                          |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 1. Business Understanding        | Problem, objectives, success criteria                                                                            |
+| 2. Data Understanding            | Loading, structure, variable types, descriptive statistics                                                       |
+| 3. Data Exploration              | Hidden missing values, class balance, distributions, categorical variables vs. income, correlations              |
+| 4. Data Preparation              | Cleaning, missing values, regrouping, feature engineering, encoding/scaling choices, export of the prepared data |
+| 5. Segmentation                  | K-Means, choice of k, segment profiling                                                                          |
+| 6. Classification                | Baselines, class imbalance, tree-based models, tuning, final test evaluation                                     |
+| 7. Evaluation and interpretation | Summary, limits, next steps                                                                                      |
 
 ## Key findings and decisions
 
@@ -41,17 +41,17 @@ End-to-end data science notebook on the **UCI Adult (Census Income)** dataset, f
 
 **Preparation**
 
-| Problem                              | Decision                                                                          |
-| ------------------------------------ | --------------------------------------------------------------------------------- |
-| `?` in `workclass` / `occupation`    | Dedicated `Unknown` category (no row deletion, no mode imputation)                |
-| `?` in `native-country`              | Mode imputation (90% are `United-States`)                                         |
-| Target labels                        | Trailing period removed                                                           |
-| Duplicates                           | 29 exact duplicates removed; profile-level duplicates kept                        |
-| `fnlwgt`, `education`                | Dropped (sampling weight with no link to income / redundant with `education-num`) |
-| Capital variables                    | `has_capital_*` indicators + `log1p` amounts; the 99,999 rows are kept            |
-| `native-country` and rare categories | Regrouped (`US` / `Non-US`, etc.)                                                 |
-| `relationship`                       | Dropped after an experiment showed no measurable gain                             |
-| Encoding / scaling                   | One-hot for nominal variables, `StandardScaler` for numeric ones                  |
+| Problem                              | Decision                                                                                                                           |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `?` in `workclass` / `occupation`    | Dedicated `Unknown` category (no row deletion, no mode imputation)                                                                 |
+| `?` in `native-country`              | Mode imputation (90% are `United-States`)                                                                                          |
+| Target labels                        | Trailing period removed                                                                                                            |
+| Duplicates                           | 29 exact duplicates removed; profile-level duplicates kept                                                                         |
+| `fnlwgt`, `education`                | Dropped (sampling weight with no link to income / redundant with `education-num`)                                                  |
+| Capital variables                    | `has_capital_*` indicators + `log1p` amounts; the 99,999 rows are kept                                                             |
+| `native-country` and rare categories | Regrouped (`US` / `Non-US`, etc.)                                                                                                  |
+| `relationship`                       | Dropped after an experiment showed no measurable gain                                                                              |
+| Encoding / scaling                   | One-hot for nominal variables, `StandardScaler` for numeric ones, applied inside the modeling pipelines (not in the exported file) |
 
 **Segmentation**
 
@@ -104,15 +104,15 @@ Recall is 13 points lower for women and the false positive rate is about 4.6 tim
 │   ├── adult.names             # Data dictionary
 │   └── Index                   # UCI index of the dataset files
 ├── requirements.txt
-├── .gitignore
+├── .gitignore                  # Excludes the regenerated raw backup (adult_raw.csv)
 └── README.md
 ```
 
 ### `adult_prepared.csv`
 
-48,813 rows and 44 columns, with no missing values: 5 standardized numeric columns, 2 binary indicators, 35 one-hot columns, the target `income` (0/1, `>50K` = 1) and `source` (official train/test split).
+The cleaned and transformed dataset in readable form: 48,813 rows and 16 columns, with no missing values and no hidden `?`. Categories are regrouped (`Unknown`, `US` / `Non-US`, merged rare categories), `capital-gain` and `capital-loss` are replaced by two 0/1 indicators and their `log1p` versions (apply `expm1` to recover the amounts), and `fnlwgt` and `education` are dropped. `income` keeps its text labels (`<=50K` / `>50K`) and `source` keeps the official train/test split.
 
-Scaling and encoding in this file are fitted on **all** rows, so it documents the result of the preparation and is not meant as input for a train/test evaluation. In the classification section, these transformations are fitted on the training set only, inside scikit-learn pipelines.
+Encoding and scaling are not applied in this file: they are fitted on the training data only, inside scikit-learn pipelines (see the notebook), to avoid data leakage.
 
 ## Getting started
 
